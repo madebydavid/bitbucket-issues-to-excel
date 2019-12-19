@@ -14,12 +14,12 @@ def parse_json(in_file, out_file):
         Convert the issues json exported from bitbucket
         to excel
         Columns
+            0) ID
             1) Title: String
-            2) Description: String
-            3) Date added: Day date month year
-            4) Kind: String(Uppercase)
-            5) Priority: String(Uppercase)
-            6) Status: String(Uppercase)
+            2) Date added: YYYY-MM-DD
+            3) Kind: String(Uppercase)
+            4) Priority: String(Uppercase)
+            5) Status: String(Uppercase)
     """
     with open(in_file) as f:
         data = json.load(f)
@@ -29,8 +29,8 @@ def parse_json(in_file, out_file):
         return
 
     issues_df = pd.DataFrame(columns=[
+        'ID',
         'Title',
-        'Description',
         'Date added',
         'Kind',
         'Priority',
@@ -38,9 +38,9 @@ def parse_json(in_file, out_file):
     ])
     for issue in data['issues']:
         ser = pd.Series({
+            'ID': issue['id'],
             'Title': issue['title'],
-            'Description': issue['content'],
-            'Date added': _format_time(issue['created_on']),
+            'Date added': _get_date(issue['created_on']),
             'Kind': issue['kind'].upper(),
             'Priority': issue['priority'].upper(),
             'Status': issue['status'].upper()
@@ -65,12 +65,10 @@ def _add_date(f_path):
         datetime_str + f_name
     )
 
-def _format_time(time_str):
+def _get_date(time_str):
     # Format str looks something like this 2017-12-14T07:10:34.500895+00:00
     date_str = time_str.split('T')[0]
-    date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-    formatted_date_str = datetime.datetime.strftime(date_obj, "%A %d %m %Y ")
-    return formatted_date_str
+    return date_str
 
 def _format_and_save_excel(writer):
     workbook = writer.book

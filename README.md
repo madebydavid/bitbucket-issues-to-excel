@@ -3,11 +3,11 @@
 This simple script neatly formats the json data from Bitbucket to an excel file for offline viewing and tracking
 For brevity, the excel file only contains the following fields
 
+* ID
 * Issue Title
-* Description
 * Date added
-* Priority
 * Kind
+* Priority
 * Status
 
 ## Dependencies
@@ -15,4 +15,4 @@ For brevity, the excel file only contains the following fields
 External dependencies are:
 
 * Pandas
-*  Xlsxwriter
+* Xlsxwriter
